@@ -1,0 +1,58 @@
+import { Button } from "@/components/ui/button"
+import { Separator } from "@/components/ui/separator"
+import { Mail, Phone, Github, Linkedin, Download } from "lucide-react"
+
+export function Footer() {
+  return (
+    <footer className="bg-muted/50 py-12 px-6">
+      <div className="max-w-4xl mx-auto">
+        <div className="text-center mb-8">
+          <h3 className="text-2xl font-bold mb-4">Let&apos;s Connect</h3>
+          <p className="text-muted-foreground mb-6">
+            Feel free to reach out for collaborations or just a friendly hello!
+          </p>
+          
+          <div className="flex flex-wrap justify-center gap-4 mb-6">
+            <Button variant="outline" size="sm" asChild>
+              <a href="mailto:aasishrajrr@gmail.com">
+                <Mail className="h-4 w-4 mr-2" />
+                Email
+              </a>
+            </Button>
+            <Button variant="outline" size="sm" asChild>
+              <a href="tel:+918248654856">
+                <Phone className="h-4 w-4 mr-2" />
+                Call
+              </a>
+            </Button>
+            <Button variant="outline" size="sm" asChild>
+              <a href="https://linkedin.com/in/aasishraj" target="_blank" rel="noopener noreferrer">
+                <Linkedin className="h-4 w-4 mr-2" />
+                LinkedIn
+              </a>
+            </Button>
+            <Button variant="outline" size="sm" asChild>
+              <a href="https://github.com/aasishraj" target="_blank" rel="noopener noreferrer">
+                <Github className="h-4 w-4 mr-2" />
+                GitHub
+              </a>
+            </Button>
+            <Button variant="outline" size="sm" asChild>
+              <a href="/resume.pdf" target="_blank" rel="noopener noreferrer">
+                <Download className="h-4 w-4 mr-2" />
+                Resume
+              </a>
+            </Button>
+          </div>
+        </div>
+        
+        <Separator className="mb-6" />
+        
+        <div className="text-center text-sm text-muted-foreground">
+          <p>&copy; 2024 Aasish Raj. All rights reserved.</p>
+          <p className="mt-2">Built with Next.js, TypeScript, and Tailwind CSS</p>
+        </div>
+      </div>
+    </footer>
+  )
+} 
