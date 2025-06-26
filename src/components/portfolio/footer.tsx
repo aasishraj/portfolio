@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
-import { Mail, Phone, Github, Linkedin, Download } from "lucide-react"
+import { Mail, Phone, Download } from "lucide-react"
 
 export function Footer() {
   return (
@@ -23,18 +23,6 @@ export function Footer() {
               <a href="tel:+918248654856">
                 <Phone className="h-4 w-4 mr-2" />
                 Call
-              </a>
-            </Button>
-            <Button variant="outline" size="sm" asChild>
-              <a href="https://linkedin.com/in/aasishraj" target="_blank" rel="noopener noreferrer">
-                <Linkedin className="h-4 w-4 mr-2" />
-                LinkedIn
-              </a>
-            </Button>
-            <Button variant="outline" size="sm" asChild>
-              <a href="https://github.com/aasishraj" target="_blank" rel="noopener noreferrer">
-                <Github className="h-4 w-4 mr-2" />
-                GitHub
               </a>
             </Button>
             <Button variant="outline" size="sm" asChild>
