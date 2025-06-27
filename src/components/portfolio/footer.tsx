@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { Mail, Phone, Download } from "lucide-react"
+import { VisitorCounter } from "@/components/visitor-counter"
 
 export function Footer() {
   return (
@@ -39,6 +40,9 @@ export function Footer() {
         <div className="text-center text-sm text-muted-foreground">
           <p>&copy; 2024 Aasish Raj. All rights reserved.</p>
           <p className="mt-2">Built with Next.js, TypeScript, and Tailwind CSS</p>
+          <div className="mt-3 flex justify-center">
+            <VisitorCounter />
+          </div>
         </div>
       </div>
     </footer>
