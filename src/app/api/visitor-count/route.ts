@@ -36,14 +36,14 @@ export async function GET(request: NextRequest) {
     const hashedIP = hashIP(clientIP);
     
     // Create visitors table if it doesn't exist
-    await sql`
-      CREATE TABLE IF NOT EXISTS visitors (
-        id SERIAL PRIMARY KEY,
-        hashed_ip VARCHAR(64) UNIQUE NOT NULL,
-        first_visit TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        last_visit TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-      )
-    `;
+    // await sql`
+    //   CREATE TABLE IF NOT EXISTS visitors (
+    //     id SERIAL PRIMARY KEY,
+    //     hashed_ip VARCHAR(64) UNIQUE NOT NULL,
+    //     first_visit TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    //     last_visit TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    //   )
+    // `;
     
     // Check if this IP has visited before
     const existingVisitor = await sql`
