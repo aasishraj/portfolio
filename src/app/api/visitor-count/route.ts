@@ -1,11 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { get } from '@vercel/edge-config';
+import { neon } from '@neondatabase/serverless';
 import { createHash } from 'crypto';
-
-interface VisitorData {
-  count: number;
-  ips: Record<string, string>;
-}
 
 function getClientIP(request: NextRequest): string {
   // Get IP from various headers that Vercel might set
@@ -36,65 +31,45 @@ function hashIP(ip: string): string {
 
 export async function GET(request: NextRequest) {
   try {
+    const sql = neon(process.env.DATABASE_URL!);
     const clientIP = getClientIP(request);
     const hashedIP = hashIP(clientIP);
     
-    // Get current visitor data from Edge Config
-    let visitorData: VisitorData;
-    try {
-      visitorData = await get('visitors') as VisitorData || { count: 0, ips: {} };
-    } catch (error) {
-      // If Edge Config is not set up yet, return current count as 0
-      console.log('Edge Config not accessible:', error);
-      visitorData = { count: 0, ips: {} };
-    }
+    // Create visitors table if it doesn't exist
+    await sql`
+      CREATE TABLE IF NOT EXISTS visitors (
+        id SERIAL PRIMARY KEY,
+        hashed_ip VARCHAR(64) UNIQUE NOT NULL,
+        first_visit TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        last_visit TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `;
     
     // Check if this IP has visited before
-    const isNewVisitor = !visitorData.ips[hashedIP];
+    const existingVisitor = await sql`
+      SELECT hashed_ip FROM visitors WHERE hashed_ip = ${hashedIP}
+    `;
+    
+    const isNewVisitor = existingVisitor.length === 0;
     
     if (isNewVisitor) {
       // Add new visitor
-      visitorData.count += 1;
-      visitorData.ips[hashedIP] = new Date().toISOString();
-      
-      // Update Edge Config via Vercel API
-      try {
-        const edgeConfigId = process.env.EDGE_CONFIG_ID;
-        const vercelToken = process.env.VERCEL_ACCESS_TOKEN;
-        
-        if (edgeConfigId && vercelToken) {
-          const response = await fetch(
-            `https://api.vercel.com/v1/edge-config/${edgeConfigId}/items`,
-            {
-              method: 'PATCH',
-              headers: {
-                'Authorization': `Bearer ${vercelToken}`,
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                items: [
-                  {
-                    operation: 'upsert',
-                    key: 'visitors',
-                    value: visitorData
-                  }
-                ]
-              })
-            }
-          );
-          
-          if (!response.ok) {
-            console.error('Failed to update Edge Config:', await response.text());
-          }
-        }
-      } catch (error) {
-        console.error('Failed to update visitor count:', error);
-        // Don't fail the request if Edge Config is not available
-      }
+      await sql`
+        INSERT INTO visitors (hashed_ip) VALUES (${hashedIP})
+      `;
+    } else {
+      // Update last visit time for existing visitor
+      await sql`
+        UPDATE visitors SET last_visit = CURRENT_TIMESTAMP WHERE hashed_ip = ${hashedIP}
+      `;
     }
     
+    // Get total visitor count
+    const countResult = await sql`SELECT COUNT(*) as count FROM visitors`;
+    const count = parseInt(countResult[0].count);
+    
     return NextResponse.json({ 
-      count: visitorData.count,
+      count,
       isNewVisitor
     });
     
