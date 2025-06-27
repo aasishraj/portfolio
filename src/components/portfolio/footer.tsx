@@ -33,16 +33,16 @@ export function Footer() {
               </a>
             </Button>
           </div>
+          <div className="mt-3 flex justify-center">
+            <VisitorCounter />
+          </div>
         </div>
         
         <Separator className="mb-6" />
         
         <div className="text-center text-sm text-muted-foreground">
-          <p>&copy; 2024 Aasish Raj. All rights reserved.</p>
+          <p>&copy; 2025 Aasish Raj. All rights reserved.</p>
           <p className="mt-2">Built with Next.js, TypeScript, and Tailwind CSS</p>
-          <div className="mt-3 flex justify-center">
-            <VisitorCounter />
-          </div>
         </div>
       </div>
     </footer>
