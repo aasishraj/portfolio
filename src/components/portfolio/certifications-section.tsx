@@ -29,7 +29,7 @@ const activities = [
   },
   {
     title: "Member: GDSC, Mulearn, Tinkerhub",
-    organization: "Tech Communities",
+    organization: "Marian Engineering College",
     type: "Community",
     icon: <Users className="h-5 w-5" />
   },
