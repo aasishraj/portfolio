@@ -54,9 +54,9 @@ const freelanceProjects: Project[] = [
     title: "Banaras Tourism Data Analysis",
     description: "Extracted insights from google maps reviews and instagram posts",
     technologies: [
-      { name: "BERT", description: "Bidirectional Encoder Representations from Transformers, a powerful language representation model.", url: "https://github.com/google-research/bert" },
-      { name: "LDA", description: "Latent Dirichlet Allocation, a topic model for discovering abstract topics in documents.", url: "https://en.wikipedia.org/wiki/Latent_Dirichlet_allocation" },
-      { name: "NLP", description: "Natural Language Processing: Enabling computers to understand and process human language.", url: "https://en.wikipedia.org/wiki/Natural_language_processing" },
+      { name: "BERT", description: "Bidirectional Encoder Representations from Transformers, a powerful language representation model."},
+      { name: "LDA", description: "Latent Dirichlet Allocation, a topic model for discovering abstract topics in documents."},
+      { name: "NLP", description: "Natural Language Processing: Enabling computers to understand and process human language."},
     ],
     organization: "BHU",
     organizationFullName: "Banaras Hindu University",
