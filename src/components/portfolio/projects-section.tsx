@@ -14,6 +14,11 @@ interface Technology {
   url?: string
 }
 
+interface GithubLink {
+  name: string
+  url: string
+}
+
 interface Project {
   title: string
   description: string
@@ -22,6 +27,7 @@ interface Project {
   organizationFullName?: string
   organizationUrl?: string
   githubUrl?: string
+  githubUrls?: GithubLink[]
   liveUrl?: string
 }
 
@@ -71,11 +77,57 @@ const personalProjects: Project[] = [
     technologies: [
         { name: "API", description: "Application Programming Interface: A set of rules allowing different software entities to communicate.", url: "https://en.wikipedia.org/wiki/API" },
         { name: "Authentication", description: "The process of verifying user identity to grant access to systems.", url: "https://en.wikipedia.org/wiki/Authentication" },
-        { name: "Education", description: "Technology applied to the field of education to facilitate learning.", url: "#" },
-        { name: "Documentation", description: "The practice of creating clear and comprehensive technical documentation for software.", url: "#" },
+        { name: "Education", description: "Technology applied to the field of education to facilitate learning."},
+        { name: "Documentation", description: "The practice of creating clear and comprehensive technical documentation for software."},
     ],
     githubUrl: "#",
-    liveUrl: "#"
+    liveUrl: "https://ezlab.vercel.app"
+  },
+  {
+    title: "Teehee.chat",
+    description: "An open-source variant of t3.chat by Theo.",
+    technologies: [
+      { name: "Open Source", description: "Software with source code that anyone can inspect, modify, and enhance." },
+      { name: "Next.js", description: "The React Framework for Production." },
+      { name: "FastAPI", description: "A modern, high-performance web framework for building APIs with Python." },
+      { name: "TypeScript", description: "A typed superset of JavaScript that compiles to plain JavaScript." },
+      { name: "Python", description: "A high-level, general-purpose programming language." },
+    ],
+    githubUrls: [
+        { name: "Frontend", url: "https://github.com/aasishraj/teehee-chat-frontend" },
+        { name: "Backend", url: "https://github.com/aasishraj/teehee-chat-backend" }
+    ],
+    liveUrl: "https://v0-teehee-chat.vercel.app/"
+  },
+  {
+    title: "Minimal Todo App",
+    description: "A minimal todo application with in-browser memory.",
+    technologies: [
+        { name: "JavaScript", description: "A programming language that conforms to the ECMAScript specification." },
+        { name: "HTML5", description: "The latest version of Hypertext Markup Language." },
+        { name: "CSS3", description: "The latest evolution of the Cascading Style Sheets language." },
+    ],
+    liveUrl: "https://todo.aasishraj.com"
+  },
+  {
+    title: "Flashcard App",
+    description: "A flashcard application with in-browser memory.",
+    technologies: [
+        { name: "JavaScript", description: "A programming language that conforms to the ECMAScript specification." },
+        { name: "HTML5", description: "The latest version of Hypertext Markup Language." },
+        { name: "CSS3", description: "The latest evolution of the Cascading Style Sheets language." },
+    ],
+    liveUrl: "https://flash.aasishraj.com"
+  },
+  {
+    title: "Python Playground",
+    description: "An in-memory python playground.",
+    technologies: [
+        { name: "Python", description: "A high-level, general-purpose programming language." },
+        { name: "WebAssembly", description: "A binary instruction format for a stack-based virtual machine." },
+        { name: "Pyodide", description: "A port of CPython to WebAssembly." },
+    ],
+    liveUrl: "https://python.aasishraj.com"
   }
 ]
 
@@ -129,6 +181,14 @@ const ProjectGrid = ({ projects }: { projects: Project[] }) => (
                 </a>
               </Button>
             )}
+            {project.githubUrls && project.githubUrls.map((link, linkIndex) => (
+                <Button variant="outline" size="sm" asChild key={linkIndex}>
+                    <a href={link.url} target="_blank" rel="noopener noreferrer">
+                    <Github className="h-4 w-4 mr-2" />
+                    {link.name}
+                    </a>
+                </Button>
+            ))}
             {project.liveUrl && (
               <Button variant="outline" size="sm" asChild>
                 <a href={project.liveUrl} target="_blank" rel="noopener noreferrer">
