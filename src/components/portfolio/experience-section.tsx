@@ -6,13 +6,13 @@ const experiences = [
   {
     title: "Python Backend Developer",
     company: "Fun Design",
-    description: "Developed APIs for e-commerce platform 'Earke'",
+    description: "Developed product filtering API endpoints for e-commerce platform 'Earke'",
     type: "Internship"
   },
   {
     title: "Gen AI Developer", 
     company: "Last Mile Consultants",
-    description: "Automated healthcare insurance adjudication using agentic pipelines",
+    description: "Designed and developed a RAG system for healthcare insurance policy documents",
     type: "Internship"
   }
 ]
@@ -36,7 +36,7 @@ export function ExperienceSection() {
                     </div>
                   </div>
                   <div className="flex-grow">
-                    <div className="flex flex-col sm:flex-row sm:items-center gap-2 mb-2">
+                    <div className="flex items-center justify-between mb-2">
                       <h3 className="text-xl font-semibold">{exp.title}</h3>
                       <Badge variant="secondary">{exp.type}</Badge>
                     </div>
