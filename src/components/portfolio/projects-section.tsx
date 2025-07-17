@@ -34,7 +34,7 @@ interface Project {
 const freelanceProjects: Project[] = [
   {
     title: "Energentic",
-    description: "Built an assistant for energy grid queries and peak-hour notifications",
+    description: "Built a Beckn protocol-based energy assistant for consumer grid queries and notifications",
     technologies: [
       { name: "Beckn Protocol", description: "An open network protocol for decentralized, local-first commerce discovery.", url: "https://becknprotocol.io/" },
       { name: "Langchain", description: "A framework for developing applications powered by LLMs.", url: "https://www.langchain.com/" },
@@ -75,12 +75,11 @@ const personalProjects: Project[] = [
     title: "ezlab - Educational Portal API",
     description: "Rebuilt ETLAB interface with secure auth and documentation",
     technologies: [
-        { name: "API", description: "Application Programming Interface: A set of rules allowing different software entities to communicate.", url: "https://en.wikipedia.org/wiki/API" },
-        { name: "Authentication", description: "The process of verifying user identity to grant access to systems.", url: "https://en.wikipedia.org/wiki/Authentication" },
+        { name: "API", description: "Application Programming Interface: A set of rules allowing different software entities to communicate."},
+        { name: "Authentication", description: "The process of verifying user identity to grant access to systems."},
         { name: "Education", description: "Technology applied to the field of education to facilitate learning."},
         { name: "Documentation", description: "The practice of creating clear and comprehensive technical documentation for software."},
     ],
-    githubUrl: "#",
     liveUrl: "https://ezlab.vercel.app"
   },
   {
@@ -100,22 +99,18 @@ const personalProjects: Project[] = [
     liveUrl: "https://v0-teehee-chat.vercel.app/"
   },
   {
-    title: "Minimal Todo App",
+    title: "Todo App",
     description: "A minimal todo application with in-browser memory.",
     technologies: [
-        { name: "JavaScript", description: "A programming language that conforms to the ECMAScript specification." },
-        { name: "HTML5", description: "The latest version of Hypertext Markup Language." },
-        { name: "CSS3", description: "The latest evolution of the Cascading Style Sheets language." },
+        { name: "Next.js", description: "The React Framework for Production." },
     ],
     liveUrl: "https://todo.aasishraj.com"
   },
   {
     title: "Flashcard App",
-    description: "A flashcard application with in-browser memory.",
+    description: "A minimal flashcard application with in-browser memory.",
     technologies: [
-        { name: "JavaScript", description: "A programming language that conforms to the ECMAScript specification." },
-        { name: "HTML5", description: "The latest version of Hypertext Markup Language." },
-        { name: "CSS3", description: "The latest evolution of the Cascading Style Sheets language." },
+        { name: "Next.js", description: "The React Framework for Production." },
     ],
     liveUrl: "https://flash.aasishraj.com"
   },
