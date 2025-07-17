@@ -9,7 +9,7 @@ import { scrollToSection } from "@/lib/scroll-to-section"
 const navItems = [
   { name: "Experience", sectionId: "experience" },
   { name: "Projects", sectionId: "projects" },
-  { name: "Certifications", sectionId: "certifications" },
+  { name: "Activities", sectionId: "certifications" },
 ]
 
 export function Header() {
@@ -18,7 +18,7 @@ export function Header() {
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container mx-auto px-6 h-16 flex items-center justify-between">
-        <div className="flex items-center">
+        <div className="flex-1">
           <button 
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
             className="text-xl font-bold hover:text-primary transition-colors"
@@ -40,7 +40,7 @@ export function Header() {
           ))}
         </nav>
 
-        <div className="flex items-center gap-2">
+        <div className="flex-1 flex justify-end items-center gap-2">
           <ThemeToggle />
           {/* Mobile Menu Button */}
           <Button
