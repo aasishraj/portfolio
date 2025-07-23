@@ -5,6 +5,8 @@ import { ThemeToggle } from "@/components/theme-toggle"
 import { Menu } from "lucide-react"
 import { useState } from "react"
 import { scrollToSection } from "@/lib/scroll-to-section"
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const navItems = [
   { name: "Experience", sectionId: "experience" },
@@ -14,6 +16,15 @@ const navItems = [
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const pathname = usePathname();
+
+  const handleNavClick = (sectionId: string) => {
+    if (pathname === "/") {
+      scrollToSection(sectionId);
+    } else {
+      window.location.href = `/#${sectionId}`;
+    }
+  };
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -32,12 +43,15 @@ export function Header() {
           {navItems.map((item) => (
             <button
               key={item.name}
-              onClick={() => scrollToSection(item.sectionId)}
+              onClick={() => handleNavClick(item.sectionId)}
               className="text-sm font-medium transition-colors hover:text-primary cursor-pointer"
             >
               {item.name}
             </button>
           ))}
+          <Link href="/blogs" className="text-sm font-medium transition-colors hover:text-primary">
+            Blog
+          </Link>
         </nav>
 
         <div className="flex-1 flex justify-end items-center gap-2">
@@ -62,7 +76,7 @@ export function Header() {
               <button
                 key={item.name}
                 onClick={() => {
-                  scrollToSection(item.sectionId)
+                  handleNavClick(item.sectionId)
                   setIsMenuOpen(false)
                 }}
                 className="block py-2 text-sm font-medium transition-colors hover:text-primary w-full text-left cursor-pointer"
@@ -70,6 +84,9 @@ export function Header() {
                 {item.name}
               </button>
             ))}
+            <Link href="/blogs" className="block py-2 text-sm font-medium transition-colors hover:text-primary w-full text-left">
+              Blog
+            </Link>
           </nav>
         </div>
       )}
