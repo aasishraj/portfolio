@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge"
 
 export function HeroSection() {
   return (
-    <section className="relative py-20 px-6 text-center">
+    <section className="relative pt-12 pb-12 px-6 text-center">
       <div className="max-w-4xl mx-auto">
         <div className="mb-8">
           <Avatar className="h-32 w-32 mx-auto mb-6">
@@ -16,7 +16,6 @@ export function HeroSection() {
             <Badge variant="secondary">Gen AI</Badge>
             <Badge variant="secondary">System Design</Badge>
             <Badge variant="secondary">AI/ML</Badge>
-            <Badge variant="secondary">Backend Development</Badge>
           </div>
         </div>
         
