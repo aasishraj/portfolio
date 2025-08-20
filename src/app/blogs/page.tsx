@@ -34,7 +34,7 @@ export default function BlogPage() {
 
   return (
     <div className="container mx-auto py-12">
-      <h1 className="mb-8 text-4xl font-bold">Blog</h1>
+      <h1 className="mb-8 text-4xl font-bold">Blogs</h1>
       <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
         {posts.map((post) => (
           <Link key={post.slug} href={`/blogs/${post.slug}`}>

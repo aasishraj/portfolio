@@ -50,7 +50,7 @@ export function Header() {
             </button>
           ))}
           <Link href="/blogs" className="text-sm font-medium transition-colors hover:text-primary">
-            Blog
+            Blogs
           </Link>
         </nav>
 
@@ -85,7 +85,7 @@ export function Header() {
               </button>
             ))}
             <Link href="/blogs" className="block py-2 text-sm font-medium transition-colors hover:text-primary w-full text-left">
-              Blog
+              Blogs
             </Link>
           </nav>
         </div>

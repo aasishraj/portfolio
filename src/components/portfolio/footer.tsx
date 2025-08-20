@@ -15,7 +15,7 @@ export function Footer() {
           
           <div className="flex flex-wrap justify-center gap-4 mb-6">
             <Button variant="outline" size="sm" asChild>
-              <a href="mailto:aasishrajrr@gmail.com">
+              <a href="mailto:mail@aasishraj.com">
                 <Mail className="h-4 w-4 mr-2" />
                 Email
               </a>
