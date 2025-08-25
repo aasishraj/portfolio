@@ -9,6 +9,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Image from 'next/image';
 import { Counter } from "@/components/mdx/Counter";
 import { FeatureGrid } from "@/components/mdx/FeatureGrid";
+import remarkGfm from 'remark-gfm';
+import remarkMath from 'remark-math';
+import rehypeKatex from 'rehype-katex';
 
 interface Frontmatter {
   title: string;
@@ -30,6 +33,9 @@ type PreProps = React.HTMLAttributes<HTMLPreElement>;
 type AnchorProps = React.AnchorHTMLAttributes<HTMLAnchorElement>;
 type HRProps = React.HTMLAttributes<HTMLHRElement>;
 type ImageProps = React.ImgHTMLAttributes<HTMLImageElement>;
+type TableProps = React.TableHTMLAttributes<HTMLTableElement>;
+type ThProps = React.ThHTMLAttributes<HTMLTableHeaderCellElement>;
+type TdProps = React.TdHTMLAttributes<HTMLTableCellElement>;
 
 // Custom components that can be used in MDX
 const components = {
@@ -53,6 +59,20 @@ const components = {
     <a className="text-primary underline-offset-4 hover:underline" {...props} />
   ),
   hr: (props: HRProps) => <hr className="border-border my-8" {...props} />,
+  table: (props: TableProps) => (
+    <table className="my-6 w-full border-collapse table-auto text-sm">
+      {props.children}
+    </table>
+  ),
+  thead: (props: React.HTMLAttributes<HTMLTableSectionElement>) => (
+    <thead className="bg-muted/40 text-left">{props.children}</thead>
+  ),
+  th: (props: ThProps) => (
+    <th className="px-3 py-2 font-semibold text-foreground border-b border-border" {...props} />
+  ),
+  td: (props: TdProps) => (
+    <td className="px-3 py-2 border-b border-border" {...props} />
+  ),
   img: ({ src, alt, ...props }: ImageProps) => {
     // Use Next.js Image component for optimized images
     if (!src || typeof src !== 'string') return null;
@@ -105,6 +125,10 @@ export default async function PostPage({
     source,
     options: {
       parseFrontmatter: true,
+      mdxOptions: {
+        remarkPlugins: [remarkGfm, remarkMath],
+        rehypePlugins: [rehypeKatex],
+      },
     },
     components,
   });
