@@ -12,6 +12,8 @@ import { FeatureGrid } from "@/components/mdx/FeatureGrid";
 import remarkGfm from 'remark-gfm';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
+import matter from "gray-matter";
+import type { Metadata } from "next";
 
 interface Frontmatter {
   title: string;
@@ -110,6 +112,23 @@ const components = {
   Counter,
   FeatureGrid,
 };
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const fullPath = path.join(process.cwd(), "blogs", `${slug}.mdx`);
+  const source = fs.readFileSync(fullPath, "utf8");
+  const { data } = matter(source);
+  const baseTitle = typeof data.title === 'string' && data.title.trim().length > 0
+    ? data.title
+    : slug.replace(/-/g, ' ');
+  return {
+    title: `${baseTitle} - Blogs - Aasish Raj`,
+  };
+}
 
 export default async function PostPage({ 
   params 

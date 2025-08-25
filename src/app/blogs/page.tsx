@@ -1,10 +1,14 @@
-
+import type { Metadata } from "next";
 import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+
+export const metadata: Metadata = {
+  title: "Blogs - Aasish Raj",
+};
 
 export default function BlogPage() {
   const postsDirectory = path.join(process.cwd(), "blogs");

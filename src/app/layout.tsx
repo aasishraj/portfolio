@@ -17,7 +17,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Aasish Raj - Portfolio",
+  title: "Portfolio - Aasish Raj",
   description: "Software developer skilled in Python, system design, and AI/ML",
 };
 

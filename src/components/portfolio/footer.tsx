@@ -20,12 +20,6 @@ export function Footer() {
                 Email
               </a>
             </Button>
-            <Button variant="outline" size="sm" asChild>
-              <a href="tel:+918248654856">
-                <Phone className="h-4 w-4 mr-2" />
-                Call
-              </a>
-            </Button>
           </div>
           <div className="mt-3 flex justify-center">
             <VisitorCounter />
