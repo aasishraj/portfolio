@@ -75,18 +75,24 @@ const components = {
   td: (props: TdProps) => (
     <td className="px-3 py-2 border-b border-border" {...props} />
   ),
-  img: ({ src, alt, ...props }: ImageProps) => {
+  img: ({ src, alt }: ImageProps) => {
     // Use Next.js Image component for optimized images
     if (!src || typeof src !== 'string') return null;
     
-    // For external images, use regular img tag with proper alt
+    // For external images, use Next.js Image with fill and unoptimized
     if (src.startsWith('http://') || src.startsWith('https://')) {
-      return <img 
-        src={src} 
-        alt={alt || "Blog post image"} 
-        className="rounded-lg shadow-md my-8" 
-        {...props} 
-      />;
+      return (
+        <div className="relative w-full my-8">
+          <Image
+            src={src}
+            alt={alt || "Blog post image"}
+            fill
+            sizes="(min-width: 1024px) 800px, 100vw"
+            className="rounded-lg shadow-md object-contain"
+            unoptimized
+          />
+        </div>
+      );
     }
     
     // For local images, use Next.js Image component

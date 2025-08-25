@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
-import { Mail, Phone } from "lucide-react"
+import { Mail } from "lucide-react"
 import { VisitorCounter } from "@/components/visitor-counter"
 
 export function Footer() {
