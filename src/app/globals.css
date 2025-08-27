@@ -126,3 +126,43 @@
     overflow-y: scroll;
   }
 }
+
+@layer utilities {
+  /* Improve readability of code blocks inside prose */
+  .prose :where(pre) {
+    @apply bg-neutral-100 dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 border border-border rounded-lg p-4 overflow-x-auto my-6;
+  }
+  .prose :where(code):not(:where(pre code)) {
+    @apply bg-muted text-foreground px-1.5 py-0.5 rounded font-mono;
+  }
+  /* Remove backtick pseudo-elements from Tailwind Typography */
+  .prose :where(code)::before,
+  .prose :where(code)::after,
+  .prose :where(pre)::before,
+  .prose :where(pre)::after {
+    content: none !important;
+  }
+
+  /* rehype-pretty-code line/word highlighting */
+  .prose :where(pre) code {
+    display: grid;
+  }
+  .prose :where(pre) code .line {
+    padding-inline: 0;
+  }
+  .prose :where(pre) code .line--highlighted {
+    @apply -mx-4 px-4 rounded-sm bg-yellow-50 dark:bg-yellow-900/30;
+  }
+  .prose :where(pre) code .word--highlighted {
+    @apply rounded bg-yellow-200/60 dark:bg-yellow-800/60;
+  }
+}
+/* Show only the correct theme variant from rehype-pretty-code */
+.prose pre[data-theme="light"],
+.prose code[data-theme="light"] { display: block; }
+.prose pre[data-theme="dark"],
+.prose code[data-theme="dark"] { display: none; }
+.dark .prose pre[data-theme="light"],
+.dark .prose code[data-theme="light"] { display: none; }
+.dark .prose pre[data-theme="dark"],
+.dark .prose code[data-theme="dark"] { display: block; }

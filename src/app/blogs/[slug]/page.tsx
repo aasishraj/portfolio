@@ -6,12 +6,10 @@ import { compileMDX } from 'next-mdx-remote/rsc';
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import Image from 'next/image';
-import { Counter } from "@/components/mdx/Counter";
-import { FeatureGrid } from "@/components/mdx/FeatureGrid";
 import remarkGfm from 'remark-gfm';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
+import rehypePrettyCode from 'rehype-pretty-code';
 import matter from "gray-matter";
 import type { Metadata } from "next";
 
@@ -30,8 +28,6 @@ type ParagraphProps = React.HTMLAttributes<HTMLParagraphElement>;
 type ListProps = React.HTMLAttributes<HTMLUListElement | HTMLOListElement>;
 type ListItemProps = React.HTMLAttributes<HTMLLIElement>;
 type BlockquoteProps = React.HTMLAttributes<HTMLQuoteElement>;
-type CodeProps = React.HTMLAttributes<HTMLElement>;
-type PreProps = React.HTMLAttributes<HTMLPreElement>;
 type AnchorProps = React.AnchorHTMLAttributes<HTMLAnchorElement>;
 type HRProps = React.HTMLAttributes<HTMLHRElement>;
 type ImageProps = React.ImgHTMLAttributes<HTMLImageElement>;
@@ -51,12 +47,6 @@ const components = {
   blockquote: (props: BlockquoteProps) => (
     <blockquote className="border-l-4 border-primary pl-4 italic my-6" {...props} />
   ),
-  code: (props: CodeProps) => (
-    <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono" {...props} />
-  ),
-  pre: (props: PreProps) => (
-    <pre className="bg-muted border border-border rounded-lg p-4 overflow-x-auto my-6" {...props} />
-  ),
   a: (props: AnchorProps) => (
     <a className="text-primary underline-offset-4 hover:underline" {...props} />
   ),
@@ -75,38 +65,16 @@ const components = {
   td: (props: TdProps) => (
     <td className="px-3 py-2 border-b border-border" {...props} />
   ),
-  img: ({ src, alt }: ImageProps) => {
-    // Use Next.js Image component for optimized images
-    if (!src || typeof src !== 'string') return null;
-    
-    // For external images, use Next.js Image with fill and unoptimized
-    if (src.startsWith('http://') || src.startsWith('https://')) {
-      return (
-        <div className="relative w-full my-8">
-          <Image
-            src={src}
-            alt={alt || "Blog post image"}
-            fill
-            sizes="(min-width: 1024px) 800px, 100vw"
-            className="rounded-lg shadow-md object-contain"
-            unoptimized
-          />
-        </div>
-      );
-    }
-    
-    // For local images, use Next.js Image component
+  img: (props: ImageProps) => {
+    // Render a plain <img> to avoid invalid <div> inside <p>
+    // Tailwind Typography will handle sizing/margins via prose classes
     return (
-      <div className="relative w-full my-8">
-        <Image
-          src={src}
-          alt={alt || "Blog post image"}
-          width={800}
-          height={400}
-          className="rounded-lg shadow-md object-cover"
-          unoptimized // Since we don't know dimensions at build time
-        />
-      </div>
+      <img
+        loading="lazy"
+        decoding="async"
+        {...props}
+        className={["my-6 rounded-lg shadow-md", props.className].filter(Boolean).join(" ")}
+      />
     );
   },
   Badge,
@@ -115,8 +83,6 @@ const components = {
   CardContent,
   CardHeader,
   CardTitle,
-  Counter,
-  FeatureGrid,
 };
 
 export async function generateMetadata({
@@ -145,14 +111,27 @@ export default async function PostPage({
   const fullPath = path.join(process.cwd(), "blogs", `${slug}.mdx`);
   const source = fs.readFileSync(fullPath, "utf8");
 
-  // Compile MDX
+  // Compile MDX with syntax highlighting
   const { content, frontmatter } = await compileMDX<Frontmatter>({
     source,
     options: {
       parseFrontmatter: true,
       mdxOptions: {
         remarkPlugins: [remarkGfm, remarkMath],
-        rehypePlugins: [rehypeKatex],
+        rehypePlugins: [
+          rehypeKatex,
+          [
+            rehypePrettyCode,
+            {
+              theme: {
+                light: 'light-plus',
+                dark: 'dark-plus',
+              },
+              keepBackground: false,
+              defaultLang: 'plaintext',
+            },
+          ],
+        ],
       },
     },
     components,
@@ -205,7 +184,7 @@ export default async function PostPage({
       <Separator className="mb-8" />
 
       {/* MDX Content */}
-      <div className="prose prose-neutral dark:prose-invert max-w-none">
+      <div className="prose prose-neutral dark:prose-invert max-w-none prose-code:before:content-none prose-code:after:content-none prose-pre:before:content-none prose-pre:after:content-none prose-img:my-8">
         {content}
       </div>
     </article>
