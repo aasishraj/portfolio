@@ -2,9 +2,7 @@ import type { Metadata } from "next";
 import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
-import Link from "next/link";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import BlogList, { type BlogPostMeta } from "@/components/blog-list";
 
 export const metadata: Metadata = {
   title: "Blogs - Aasish Raj",
@@ -14,7 +12,7 @@ export default function BlogPage() {
   const postsDirectory = path.join(process.cwd(), "blogs");
   const fileNames = fs.readdirSync(postsDirectory);
 
-  const posts = fileNames
+  const posts: BlogPostMeta[] = fileNames
     .filter((fileName) => fileName.endsWith('.mdx'))
     .map((fileName) => {
       const slug = fileName.replace(/\.mdx$/, "");
@@ -33,31 +31,20 @@ export default function BlogPage() {
       };
     });
 
-  // Sort posts by number (newest first)
-  posts.sort((a, b) => (b.number || 0) - (a.number || 0));
+  // Sort posts by date (newest first)
+  posts.sort((a, b) => {
+    const timeA = a.date ? new Date(a.date).getTime() : 0;
+    const timeB = b.date ? new Date(b.date).getTime() : 0;
+    return timeB - timeA;
+  });
 
-  return (
-    <div className="container mx-auto py-12">
-      <h1 className="mb-8 text-4xl font-bold">Blogs</h1>
-      <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-        {posts.map((post) => (
-          <Link key={post.slug} href={`/blogs/${post.slug}`}>
-            <Card className="cursor-pointer transition-all hover:shadow-lg relative">
-              <div className="absolute top-4 right-4">
-                <Badge>{post.tag}</Badge>
-              </div>
-              <CardHeader className="pr-20">
-                <CardTitle>{post.title}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground mb-3">
-                  {post.description}
-                </p>
-              </CardContent>
-            </Card>
-          </Link>
-        ))}
-      </div>
-    </div>
+  // Derive unique tags for filters (preserve insertion order)
+  const tags = Array.from(
+    posts.reduce((set, p) => {
+      if (p.tag) set.add(p.tag);
+      return set;
+    }, new Set<string>())
   );
+
+  return <BlogList posts={posts} tags={tags} />;
 } 
