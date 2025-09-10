@@ -31,7 +31,7 @@ const contributions: OpenSourceContribution[] = [
     repositoryUrl: "https://github.com/langchain-ai/langchain",
     contributionUrl: "https://github.com/langchain-ai/langchain/pull/31782",
     type: "Bug Fix",
-    status: "Open"
+    status: "Merged"
   }
 ]
 
