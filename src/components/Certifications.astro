@@ -1,0 +1,88 @@
+---
+const certifications = [
+  {
+    title: "Campuzon Winter Workshop - Web Development",
+    type: "Workshop",
+  },
+  {
+    title: "Spark AR - Instagram Filters",
+    type: "Certification", 
+  },
+  {
+    title: "Typing Titans Winner - 83 WPM",
+    type: "Achievement",
+  },
+];
+
+const activities = [
+  {
+    title: "Speaker: DSA Workshop",
+    organization: "Marian Engineering College",
+    type: "Speaking",
+  },
+  {
+    title: "Member: GDSC, Mulearn, Tinkerhub",
+    organization: "Marian Engineering College",
+    type: "Community",
+  },
+  {
+    title: "Hobbies: Blogging, Calisthenics, DIY Electronics, Keyboard",
+    organization: "Personal Interests",
+    type: "Hobby",
+  },
+];
+---
+
+<section id="certifications" class="py-12 px-6 scroll-mt-14">
+  <div class="max-w-4xl mx-auto">
+    <div class="mb-8">
+      <h2 class="text-2xl font-bold tracking-tight mb-2">Certifications & Activities</h2>
+      <p class="text-sm text-(--muted-foreground)">Workshops, speaking, and community involvement</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- Certifications -->
+      <div class="card-surface p-5">
+        <h3 class="font-semibold text-lg mb-4 flex items-center gap-2">
+          <svg class="h-4 w-4 text-(--weights)" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="8" r="6"></circle>
+            <path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"></path>
+          </svg>
+          Certifications & Awards
+        </h3>
+        <div class="space-y-3">
+          {certifications.map((cert) => (
+            <div class="p-3 border border-(--border) rounded bg-(--card-muted) flex items-center justify-between gap-2">
+              <span class="text-sm font-medium">{cert.title}</span>
+              <span class="chip text-xs shrink-0">{cert.type}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- Activities -->
+      <div class="card-surface p-5">
+        <h3 class="font-semibold text-lg mb-4 flex items-center gap-2">
+          <svg class="h-4 w-4 text-(--cache)" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+            <circle cx="9" cy="7" r="4"></circle>
+            <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+          </svg>
+          Activities & Community
+        </h3>
+        <div class="space-y-3">
+          {activities.map((act) => (
+            <div class="p-3 border border-(--border) rounded bg-(--card-muted)">
+              <div class="flex items-center justify-between gap-2 mb-1">
+                <span class="text-sm font-medium">{act.title}</span>
+                <span class="chip text-xs shrink-0">{act.type}</span>
+              </div>
+              <p class="text-xs text-(--muted-foreground)">{act.organization}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,57 @@
+---
+---
+
+<header class="sticky top-0 z-50 w-full border-b border-(--border) bg-(--background)/90 backdrop-blur-sm">
+  <div class="max-w-4xl mx-auto px-6 h-14 flex items-center justify-between gap-4">
+    <a href="/" class="font-bold text-lg tracking-tight hover:text-(--weights) transition-colors shrink-0">
+      Aasish Raj
+    </a>
+
+    <!-- Navigation -->
+    <nav class="flex items-center gap-4 sm:gap-6 text-xs sm:text-sm font-medium overflow-x-auto">
+      <a href="/#experience" class="text-(--muted-foreground) hover:text-(--foreground) transition-colors">
+        Experience
+      </a>
+      <a href="/#projects" class="text-(--muted-foreground) hover:text-(--foreground) transition-colors">
+        Projects
+      </a>
+      <a href="/#open-source" class="text-(--muted-foreground) hover:text-(--foreground) transition-colors hidden sm:inline">
+        Open Source
+      </a>
+      <a href="/#certifications" class="text-(--muted-foreground) hover:text-(--foreground) transition-colors hidden md:inline">
+        Activities
+      </a>
+      <a href="/blogs" class="text-(--muted-foreground) hover:text-(--foreground) transition-colors">
+        Blogs
+      </a>
+    </nav>
+
+    <div class="flex items-center shrink-0">
+      <!-- Theme Toggle Button -->
+      <button
+        type="button"
+        onclick="window.toggleTheme()"
+        class="btn-control p-2 h-9 w-9"
+        aria-label="Toggle theme"
+        title="Toggle dark/light mode"
+      >
+        <!-- Sun icon (shown in dark mode) -->
+        <svg class="h-4 w-4 hidden dark:block" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="4"></circle>
+          <path d="M12 2v2"></path>
+          <path d="M12 20v2"></path>
+          <path d="m4.93 4.93 1.41 1.41"></path>
+          <path d="m17.66 17.66 1.41 1.41"></path>
+          <path d="M2 12h2"></path>
+          <path d="M20 12h2"></path>
+          <path d="m6.34 17.66-1.41 1.41"></path>
+          <path d="m19.07 4.93-1.41 1.41"></path>
+        </svg>
+        <!-- Moon icon (shown in light mode) -->
+        <svg class="h-4 w-4 block dark:hidden" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>

@@ -1,0 +1,305 @@
+@import "tailwindcss";
+@import "katex/dist/katex.min.css";
+
+:root {
+  color-scheme: light;
+  --background: #faf9f6;
+  --foreground: #000000;
+  --muted: #f0efec;
+  --muted-foreground: #5a5a5a;
+  --card: #ffffff;
+  --card-muted: #f4f3ef;
+  --card-foreground: #000000;
+  --border: #dfddd7;
+  --control: #f0efec;
+  --control-hover: #e6e5e1;
+  --control-selected: #e5edf9;
+  --control-border: #767676;
+  --track: #858585;
+  --weights: #2456a6;
+  --cache: #b54708;
+  --runtime: #00796b;
+  --radius: 4px;
+}
+
+:root[data-theme="dark"],
+:root.dark {
+  color-scheme: dark;
+  --background: #000000;
+  --foreground: #e6e6e6;
+  --muted: #141414;
+  --muted-foreground: #9a9a9a;
+  --card: #0d0d0d;
+  --card-muted: #141414;
+  --card-foreground: #e6e6e6;
+  --border: #262626;
+  --control: #141414;
+  --control-hover: #232323;
+  --control-selected: #14243c;
+  --control-border: #777777;
+  --track: #777777;
+  --weights: #6495ed;
+  --cache: #ffbe55;
+  --runtime: #31ad91;
+}
+
+@theme {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-card: var(--card);
+  --color-card-muted: var(--card-muted);
+  --color-card-foreground: var(--card-foreground);
+  --color-border: var(--border);
+  --color-control: var(--control);
+  --color-control-hover: var(--control-hover);
+  --color-control-selected: var(--control-selected);
+  --color-control-border: var(--control-border);
+  --color-weights: var(--weights);
+  --color-cache: var(--cache);
+  --color-runtime: var(--runtime);
+  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--background);
+  color: var(--foreground);
+  min-height: 100vh;
+  margin: 0;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+button, input, select, textarea {
+  font: inherit;
+}
+
+button:focus-visible, select:focus-visible, input:focus-visible, a:focus-visible {
+  outline: 2px solid var(--weights);
+  outline-offset: 3px;
+}
+
+/* Control buttons matching llm-memory-req */
+.btn-control {
+  color: var(--foreground);
+  background-color: var(--control);
+  border: 1px solid var(--control-border);
+  border-radius: var(--radius);
+  padding: 0.4em 0.65em;
+  font-size: 0.875rem;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.btn-control:hover {
+  background-color: var(--control-hover);
+  border-color: var(--weights);
+}
+
+.btn-control.active, .btn-control[aria-pressed="true"] {
+  background-color: var(--control-selected);
+  border-color: var(--weights);
+  box-shadow: inset 0 -2px 0 var(--weights);
+}
+
+/* Chips / Badges */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2em 0.55em;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--control);
+  color: var(--foreground);
+  text-decoration: none;
+}
+
+.chip.chip-blue {
+  color: var(--weights);
+  border-color: var(--weights);
+}
+
+.chip.chip-amber {
+  color: var(--cache);
+  border-color: var(--cache);
+}
+
+.chip.chip-teal {
+  color: var(--runtime);
+  border-color: var(--runtime);
+}
+
+/* Surface Cards */
+.card-surface {
+  background-color: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.card-surface:hover {
+  border-color: var(--control-border);
+}
+
+/* Prose and Markdown styling */
+.prose {
+  color: var(--foreground);
+  max-width: 68ch;
+  line-height: 1.7;
+}
+
+.prose h1, .prose h2, .prose h3, .prose h4 {
+  color: var(--foreground);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.prose h1 {
+  font-size: 2.25rem;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.prose h2 {
+  font-size: 1.5rem;
+  margin-top: 2.25rem;
+  margin-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0.4rem;
+}
+
+.prose h3 {
+  font-size: 1.25rem;
+  margin-top: 1.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.prose p {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.prose a {
+  color: var(--weights);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.prose a:hover {
+  opacity: 0.85;
+}
+
+.prose ul, .prose ol {
+  padding-left: 1.5rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.prose li {
+  margin-top: 0.35rem;
+  margin-bottom: 0.35rem;
+}
+
+.prose blockquote {
+  border-left: 3px solid var(--weights);
+  margin: 1.5rem 0;
+  padding-left: 1rem;
+  font-style: italic;
+  color: var(--muted-foreground);
+}
+
+/* Inline code */
+.prose :not(pre) > code {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  background-color: var(--control);
+  color: var(--foreground);
+  padding: 0.15rem 0.35rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+}
+
+/* Shiki Code blocks */
+.prose pre.astro-code {
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius) !important;
+  padding: 1.15rem 1.25rem !important;
+  overflow-x: auto !important;
+  font-family: var(--font-mono) !important;
+  font-size: 0.875rem !important;
+  line-height: 1.65 !important;
+  margin: 1.75rem 0 !important;
+  background-color: #f4f3ee !important; /* Warm crisp off-white for light mode */
+  color: #24292e !important;
+}
+
+.prose pre.astro-code code {
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  font-family: inherit !important;
+  font-size: inherit !important;
+}
+
+/* Shiki Dark Mode: Apply --shiki-dark variables when in dark mode */
+html.dark .prose pre.astro-code,
+html[data-theme="dark"] .prose pre.astro-code {
+  background-color: #121212 !important; /* Deep matte surface for dark mode */
+  border-color: var(--border) !important;
+  color: var(--shiki-dark, #e1e4e8) !important;
+}
+
+html.dark .prose pre.astro-code span,
+html[data-theme="dark"] .prose pre.astro-code span {
+  color: var(--shiki-dark) !important;
+  font-style: var(--shiki-dark-font-style, inherit) !important;
+  font-weight: var(--shiki-dark-font-weight, inherit) !important;
+  text-decoration: var(--shiki-dark-text-decoration, inherit) !important;
+}
+
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  font-size: 0.9rem;
+}
+
+.prose th, .prose td {
+  border: 1px solid var(--border);
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+}
+
+.prose th {
+  background-color: var(--control);
+  font-weight: 600;
+}
+
+.prose hr {
+  border: 0;
+  border-top: 1px solid var(--border);
+  margin: 2rem 0;
+}
+
+/* KaTeX formula display improvements */
+.katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.5rem 0;
+  margin: 1.25rem 0;
+}

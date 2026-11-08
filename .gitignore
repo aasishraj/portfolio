@@ -13,9 +13,12 @@
 # testing
 /coverage
 
-# next.js
-/.next/
-/out/
+# Astro
+.astro/
+dist/
+
+# Persistent local data (visitor stats)
+data/
 
 # production
 /build

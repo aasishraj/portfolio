@@ -1,0 +1,134 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const allPosts = await getCollection('blog');
+
+// Sort by date newest first
+const sortedPosts = allPosts.sort((a, b) => {
+  const dateA = a.data.date ? new Date(a.data.date).getTime() : 0;
+  const dateB = b.data.date ? new Date(b.data.date).getTime() : 0;
+  return dateB - dateA;
+});
+
+// Extract unique tags
+const tags = Array.from(
+  new Set(sortedPosts.map((p) => p.data.tag).filter(Boolean) as string[])
+);
+
+const formatDate = (dateVal: string | Date | undefined) => {
+  if (!dateVal) return '';
+  return new Date(dateVal).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+  });
+};
+---
+
+<BaseLayout title="Blogs - Aasish Raj" description="Technical articles and notes by Aasish Raj">
+  <div class="max-w-4xl mx-auto py-12 px-6">
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8 pb-4 border-b border-(--border)">
+      <div>
+        <h1 class="text-3xl font-bold tracking-tight mb-1">Blogs</h1>
+        <p class="text-sm text-(--muted-foreground)">Notes on machine learning, systems, and engineering</p>
+      </div>
+
+      <!-- Tag Filters -->
+      <div id="tag-filters" class="flex flex-wrap gap-1.5" role="tablist">
+        <button
+          type="button"
+          class="btn-control active text-xs"
+          data-filter="all"
+          role="tab"
+          aria-selected="true"
+        >
+          All
+        </button>
+        {tags.map((tag) => (
+          <button
+            type="button"
+            class="btn-control text-xs"
+            data-filter={tag}
+            role="tab"
+            aria-selected="false"
+          >
+            {tag}
+          </button>
+        ))}
+      </div>
+    </div>
+
+    <!-- Posts Grid -->
+    <div id="posts-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      {sortedPosts.map((post) => (
+        <a
+          href={`/blogs/${post.id.replace(/\.mdx?$/, '')}`}
+          class="post-card card-surface p-5 flex flex-col justify-between group no-underline text-inherit"
+          data-tag={post.data.tag || ''}
+        >
+          <div>
+            <div class="flex items-center justify-between gap-2 mb-2">
+              <div class="flex items-center gap-1.5">
+                {post.data.tag && <span class="chip text-xs chip-blue">{post.data.tag}</span>}
+                {post.data.number && (
+                  <span class="text-xs text-(--muted-foreground) font-mono">
+                    #{post.data.number}
+                  </span>
+                )}
+              </div>
+              {post.data.date && (
+                <time class="text-xs text-(--muted-foreground)">
+                  {formatDate(post.data.date)}
+                </time>
+              )}
+            </div>
+
+            <h2 class="text-lg font-semibold tracking-tight mb-2 group-hover:text-(--weights) transition-colors">
+              {post.data.title}
+            </h2>
+
+            {post.data.description && (
+              <p class="text-sm text-(--muted-foreground) line-clamp-3">
+                {post.data.description}
+              </p>
+            )}
+          </div>
+
+          <div class="pt-3 mt-4 border-t border-(--border) flex items-center justify-between text-xs text-(--weights)">
+            <span class="font-medium">Read article &rarr;</span>
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+
+  <script is:inline>
+    const filterButtons = document.querySelectorAll('#tag-filters button');
+    const postCards = document.querySelectorAll('.post-card');
+
+    filterButtons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const selected = btn.getAttribute('data-filter');
+
+        // Update active buttons
+        filterButtons.forEach((b) => {
+          b.classList.remove('active');
+          b.setAttribute('aria-selected', 'false');
+        });
+        btn.classList.add('active');
+        btn.setAttribute('aria-selected', 'true');
+
+        // Show/hide cards
+        postCards.forEach((card) => {
+          const cardTag = card.getAttribute('data-tag');
+          if (selected === 'all' || cardTag === selected) {
+            card.style.display = 'flex';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      });
+    });
+  </script>
+</BaseLayout>

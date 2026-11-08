@@ -1,36 +1,114 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Portfolio - Aasish Raj
+
+A minimal, ultra-fast personal portfolio and technical blog built with **Astro 5**, styled with the palette and typography inspired by `llm-memory-req.html`, and ready to be hosted on your VPS.
+
+## Highlights
+
+- **Astro 5**: Pre-rendered static pages by default with zero client JavaScript overhead for content pages.
+- **Color Scheme & Theme**: Styled after `llm-memory-req.html` with:
+  - Light mode: Warm eggshell `#faf9f6` background, crisp ink black `#000000` text, and slate blue `--weights: #2456a6` interactive accents.
+  - Dark mode: True pitch black `#000000` background, `--weights: #6495ed` cornflower blue, amber `--cache: #ffbe55`, and teal `--runtime: #31ad91`.
+  - Crisp `4px` control radii and high-contrast focus outlines.
+- **Technical Blog with LaTeX**:
+  - Full MDX support with Math formulas rendered at build-time via KaTeX (`remark-math` + `rehype-katex`).
+  - Shiki syntax-highlighted code blocks with zero runtime client-side parser overhead.
+  - Instant client-side tag filtering without framework bloat.
+- **VPS Self-Hosted Visitor Counter**:
+  - On-demand server route at `/api/visitor-count`.
+  - Self-contained local persistence stored in `data/visitors.json` with SHA-256 privacy hashing.
+  - No external cloud databases (e.g. Neon) required.
 
 ## Getting Started
 
-First, run the development server:
-
+### Install dependencies
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Development
+```bash
+npm run dev
+```
+Open [http://localhost:4321](http://localhost:4321) in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Build
+```bash
+npm run build
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Preview production build locally
+```bash
+npm run start
+```
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## Dokploy Deployment Guide (Recommended)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Since you are hosting on your VPS with **Dokploy**, deployment is plug-and-play:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. In Dokploy, go to your project and click **Create Application**.
+2. **Repository**: Select GitHub and pick `aasishraj/portfolio` (branch: `main`).
+3. **Build Type**: Select **Dockerfile** (the optimized multi-stage `Dockerfile` in the root is pre-configured).
+4. **Port**: Set application port to `4321`.
+5. **Domain**: Enter your domain (e.g., `aasishraj.com`) and toggle HTTPS / Let's Encrypt.
+6. **Persistent Volume (Optional, for visitor counts)**:
+   - Under the **Volumes** tab in Dokploy, add a volume mount:
+     - **Host Path / Named Volume**: `portfolio-data`
+     - **Container Mount Path**: `/app/data`
+   - This ensures visitor counts survive container updates and rebuilds.
+7. Click **Deploy**.
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Alternative Manual VPS Deployment (PM2 / Systemd)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+On your VPS:
+```bash
+# Clone the repository
+git clone <repo-url> portfolio
+cd portfolio
+
+# Install dependencies and build
+npm install
+npm run build
+
+# Start with PM2
+pm2 start npm --name "portfolio" -- run start
+# Or direct command:
+# HOST=127.0.0.1 PORT=4321 node ./dist/server/entry.mjs
+```
+
+### 2. Reverse Proxy Configuration
+
+#### Option A: Caddy (Recommended - automatic HTTPS)
+Add this to `/etc/caddy/Caddyfile`:
+```caddy
+yourdomain.com {
+    reverse_proxy 127.0.0.1:4321
+    encode gzip zstd
+}
+```
+Reload Caddy:
+```bash
+sudo systemctl reload caddy
+```
+
+#### Option B: Nginx
+```nginx
+server {
+    server_name yourdomain.com;
+
+    location / {
+        proxy_pass http://127.0.0.1:4321;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_cache_bypass $http_upgrade;
+    }
+}
+```
