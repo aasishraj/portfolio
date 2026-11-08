@@ -25,9 +25,6 @@ ENV NODE_ENV=production
 ENV HOST=0.0.0.0
 ENV PORT=4321
 
-# Setup data directory with proper permissions for the node user
-RUN mkdir -p /app/data && chown -R node:node /app
-
 # Copy runtime assets and dependencies from builder
 COPY --from=builder /app/package.json ./
 COPY --from=builder /app/node_modules ./node_modules

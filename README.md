@@ -43,20 +43,16 @@ npm run start
 
 ---
 
-## Dokploy Deployment Guide (Recommended)
-
-Since you are hosting on your VPS with **Dokploy**, deployment is plug-and-play:
+## Dokploy Deployment Guide
 
 1. In Dokploy, go to your project and click **Create Application**.
 2. **Repository**: Select GitHub and pick `aasishraj/portfolio` (branch: `main`).
-3. **Build Type**: Select **Dockerfile** (the optimized multi-stage `Dockerfile` in the root is pre-configured).
+3. **Build Type**: Select **Dockerfile**.
 4. **Port**: Set application port to `4321`.
-5. **Domain**: Enter your domain (e.g., `aasishraj.com`) and toggle HTTPS / Let's Encrypt.
-6. **Persistent Volume (Optional, for visitor counts)**:
-   - Under the **Volumes** tab in Dokploy, add a volume mount:
-     - **Host Path / Named Volume**: `portfolio-data`
-     - **Container Mount Path**: `/app/data`
-   - This ensures visitor counts survive container updates and rebuilds.
+5. **Environment Variables**:
+   - `DATABASE_URL`: Your existing database connection string (e.g., Neon PostgreSQL).
+   - `IP_SALT` *(optional)*: Custom string for hashing visitor IPs.
+6. **Domain**: Enter your domain (e.g., `aasishraj.com`) and toggle HTTPS / Let's Encrypt.
 7. Click **Deploy**.
 
 ---

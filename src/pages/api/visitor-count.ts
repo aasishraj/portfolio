@@ -1,52 +1,8 @@
 import type { APIRoute } from 'astro';
+import { neon } from '@neondatabase/serverless';
 import { createHash } from 'node:crypto';
-import fs from 'node:fs';
-import path from 'node:path';
 
 export const prerender = false;
-
-interface VisitorData {
-  count: number;
-  visitors: Record<string, string>; // hashed_ip -> timestamp
-}
-
-const DATA_DIR = path.join(process.cwd(), 'data');
-const DATA_FILE = path.join(DATA_DIR, 'visitors.json');
-
-function ensureDataFile(): VisitorData {
-  if (!fs.existsSync(DATA_DIR)) {
-    fs.mkdirSync(DATA_DIR, { recursive: true });
-  }
-
-  if (!fs.existsSync(DATA_FILE)) {
-    const initial: VisitorData = { count: 0, visitors: {} };
-    fs.writeFileSync(DATA_FILE, JSON.stringify(initial, null, 2), 'utf-8');
-    return initial;
-  }
-
-  try {
-    const content = fs.readFileSync(DATA_FILE, 'utf-8');
-    return JSON.parse(content) as VisitorData;
-  } catch (err) {
-    console.error('Failed to parse visitors.json, resetting', err);
-    const initial: VisitorData = { count: 0, visitors: {} };
-    fs.writeFileSync(DATA_FILE, JSON.stringify(initial, null, 2), 'utf-8');
-    return initial;
-  }
-}
-
-function saveVisitorData(data: VisitorData) {
-  try {
-    if (!fs.existsSync(DATA_DIR)) {
-      fs.mkdirSync(DATA_DIR, { recursive: true });
-    }
-    const tempFile = `${DATA_FILE}.tmp`;
-    fs.writeFileSync(tempFile, JSON.stringify(data, null, 2), 'utf-8');
-    fs.renameSync(tempFile, DATA_FILE);
-  } catch (err) {
-    console.error('Failed to save visitor data', err);
-  }
-}
 
 function getClientIP(headers: Headers): string {
   const forwardedFor = headers.get('x-forwarded-for');
@@ -55,31 +11,58 @@ function getClientIP(headers: Headers): string {
   if (realIP) return realIP;
   const cfConnectingIP = headers.get('cf-connecting-ip');
   if (cfConnectingIP) return cfConnectingIP;
-  return '127.0.0.1';
+  return 'unknown';
 }
 
 function hashIP(ip: string): string {
-  const salt = process.env.IP_SALT || 'portfolio-salt-aasishraj';
+  const salt = process.env.IP_SALT || 'default-salt';
   return createHash('sha256').update(ip + salt).digest('hex');
 }
 
 export const GET: APIRoute = async ({ request }) => {
   try {
+    const databaseUrl = process.env.DATABASE_URL;
+    if (!databaseUrl) {
+      console.warn('DATABASE_URL is not configured');
+      return new Response(
+        JSON.stringify({ count: 0, isNewVisitor: false, error: 'DATABASE_URL not configured' }),
+        {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' },
+        }
+      );
+    }
+
+    const sql = neon(databaseUrl);
     const clientIP = getClientIP(request.headers);
     const hashedIP = hashIP(clientIP);
 
-    const data = ensureDataFile();
-    const isNewVisitor = !data.visitors[hashedIP];
+    // Check if this IP has visited before
+    const existingVisitor = await sql`
+      SELECT hashed_ip FROM visitors WHERE hashed_ip = ${hashedIP}
+    `;
 
-    data.visitors[hashedIP] = new Date().toISOString();
+    const isNewVisitor = existingVisitor.length === 0;
+
     if (isNewVisitor) {
-      data.count += 1;
-      saveVisitorData(data);
+      // Add new visitor
+      await sql`
+        INSERT INTO visitors (hashed_ip) VALUES (${hashedIP})
+      `;
+    } else {
+      // Update last visit time for existing visitor
+      await sql`
+        UPDATE visitors SET last_visit = CURRENT_TIMESTAMP WHERE hashed_ip = ${hashedIP}
+      `;
     }
+
+    // Get total visitor count
+    const countResult = await sql`SELECT COUNT(*) as count FROM visitors`;
+    const count = parseInt(countResult[0].count, 10);
 
     return new Response(
       JSON.stringify({
-        count: data.count,
+        count,
         isNewVisitor,
       }),
       {
@@ -93,7 +76,11 @@ export const GET: APIRoute = async ({ request }) => {
   } catch (error) {
     console.error('Error in visitor count API:', error);
     return new Response(
-      JSON.stringify({ count: 0, isNewVisitor: false, error: 'Internal error' }),
+      JSON.stringify({
+        count: 0,
+        isNewVisitor: false,
+        error: 'Failed to get visitor count',
+      }),
       {
         status: 500,
         headers: { 'Content-Type': 'application/json' },
