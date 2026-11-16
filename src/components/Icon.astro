@@ -1,0 +1,24 @@
+---
+interface Props {
+  name: string;
+  class?: string;
+}
+
+const { name, class: className = 'h-4 w-4' } = Astro.props;
+
+const icons = import.meta.glob<string>('../assets/svg/**/*.svg', {
+  query: '?raw',
+  import: 'default',
+  eager: true,
+});
+
+const svg = icons[`../assets/svg/${name}.svg`];
+
+if (!svg) {
+  throw new Error(`Icon "${name}" not found in src/assets/svg/`);
+}
+
+const svgWithClass = svg.replace('<svg', `<svg class="${className}"`);
+---
+
+<Fragment set:html={svgWithClass} />
